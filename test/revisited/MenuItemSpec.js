@@ -54,4 +54,18 @@ describe('MenuItem revisited', function() {
 
     ReactTestUtils.Simulate.keyDown(anchor, { keyCode: 1 });
   });
+
+  it('click handling with onSelect prop', function(done) {
+    const handleSelect = (event, selectedEvent) => {
+      selectedEvent.eventKey.should.equal('1');
+      done();
+    };
+    const instance = ReactTestUtils.renderIntoDocument(
+      <MenuItem onSelect={handleSelect} eventKey='1'>Item</MenuItem>
+    );
+    const node = React.findDOMNode(instance);
+    const anchor = ReactTestUtils.findRenderedDOMComponentWithTag(instance, 'A');
+
+    ReactTestUtils.Simulate.click(anchor);
+  });
 });
