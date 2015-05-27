@@ -87,7 +87,21 @@ violation of semver, than a patch release reverting the offending change should
 be pushed as soon as possible to correct the error. The offending change can
 then be re-applied and released with the proper version bump.
 
-## Live releasing the documentation
+### Git Flow
+
+In an effort to reduce the frequency with which we introduce breaking changes we
+should do our best to first push deprecation warnings in a Minor or Patch
+release. Also, Pull Requests with breaking changes should be submitted against
+the `alpha` branch. Which we will in turn release as an `alpha` release of the
+next Major version. When we are ready to release the next Major version bump we
+will merge the `alpha` branch into the `beta` branch and cut a `beta` release.
+Once bugs have been addressed with the `beta` release then we will merge the
+`beta` branch to master and release the Major version bump. This is fairly
+inline with [Vincent Driessen's version of Git Flow](http://nvie.com/posts/a-successful-git-branching-model/).
+Where our `alpha` branch is similar to his development branch and `beta` is
+similar to his release branch.
+
+### Live releasing the documentation
 
 The documentation release script does a similar job to the release script except
 that it doesn't publish to npm. It will auto tag the current branch with
@@ -100,17 +114,17 @@ that you start from that tag.
 
 To live patch the documentation in between release follow these steps
 
-0. Find the latest documentation release.
+1. Find the latest documentation release.
   - Check the latest release tag (lets say `v0.22.1`).
   - Look for a docs-release tag for that version ex: `v0.22.1-docs.X`
   - If one exists, check-it-out. If not checkout the latest release tag.
   - *Note: Checkout the tag and not master directly because some live
    documentation changes on master that could related to new components
    or updates for the upcoming release*
-0. Create a new branch from there (for example `git checkout -b docs/v0.22.1`)
-0. Cherry-pick the commits you want to include in the live update
+2. Create a new branch from there (for example `git checkout -b docs/v0.22.1`)
+3. Cherry-pick the commits you want to include in the live update
 `git cherry-pick <commit-ish>...`
-0. Use the release-docs script to push and tag to the documentation repository.
+4. Use the release-docs script to push and tag to the documentation repository.
 
 *Note: The branch name you checkout to cherry-picked the commit is not enforced.
 Though keeping similar names ex: `docs/<version>` helps finding the branch
@@ -122,7 +136,7 @@ Example usage of release-docs script:
 $ ./tools/release-docs
 ```
 
-## Check everything is OK before releasing
+### Check everything is OK before releasing
 
 Release tools have a very useful option `--dry-run`.
 
